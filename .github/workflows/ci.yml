@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Unit tests
+        run: node --test
+      - name: HTML validation
+        run: npx --yes html-validate@8.29.0 index.html
+      - name: Size budget
+        run: |
+          set -e
+          html=$(stat -c %s index.html)
+          echo "index.html: $html bytes"
+          [ "$html" -le 61440 ] || { echo "index.html exceeds 60 KB"; exit 1; }
+          big=$(find assets -type f -size +2M)
+          [ -z "$big" ] || { echo "assets over 2 MB:"; echo "$big"; exit 1; }
+          echo "size budget OK"
