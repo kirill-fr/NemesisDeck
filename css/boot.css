@@ -1,0 +1,83 @@
+/* boot.css - Boot overlay: deck size / music selector and the praise transmission. */
+/* --- START / DECK SIZE SELECTOR --- */
+.boot-overlay{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(1,8,2,.96);
+  box-shadow:inset 0 0 55px rgba(70,255,90,.055);
+}
+.boot-overlay.hidden{display:none}
+.boot-box{
+  width:min(420px,100%);
+  border:2px solid var(--green3);
+  padding:18px 14px 14px;
+  text-align:center;
+  background:#030b04;
+  box-shadow:inset 0 0 0 2px #020502, 0 0 18px rgba(80,255,90,.08);
+}
+.boot-title{font-size:18px;color:var(--green2);letter-spacing:1px;margin-bottom:5px;text-shadow:0 0 8px rgba(110,255,120,.18)}
+.boot-sub{font-size:8px;color:var(--green3);margin-bottom:13px;line-height:1.4}
+.deck-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
+.deck-option{
+  min-height:42px;
+  padding:4px 0;
+  font-size:13px;
+  color:var(--green2);
+  border:1px solid var(--green3);
+  background:#041006;
+  box-shadow:none;
+}
+.deck-option.selected{
+  color:#041006;
+  background:var(--green2);
+  border-color:var(--green2);
+  text-shadow:none;
+}
+
+.music-question{margin:12px 0 14px;padding:10px;border:1px solid currentColor;background:rgba(0,20,0,.26)}
+.music-question-title{font-size:10px;line-height:1.45;margin-bottom:8px;color:var(--green2)}
+.music-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.music-option{font:inherit;color:var(--green2);background:#020b04;border:1px solid currentColor;min-height:38px;cursor:pointer;box-shadow:inset 0 0 8px rgba(78,255,100,.08)}
+.music-option.selected{background:var(--green2);color:#021204;box-shadow:0 0 10px rgba(98,255,118,.32)}
+.boot-confirm{width:100%;min-height:48px;font-size:12px}
+.boot-status{font-size:7px;color:var(--green3);margin-top:9px;min-height:10px}
+@media(max-width:390px){
+  .boot-box{padding:15px 10px 12px}
+  .boot-title{font-size:16px}
+  .deck-picker{gap:3px}
+  .deck-option{font-size:11px;min-height:40px}
+}
+
+
+/* PRAISE TRANSMISSION INSIDE WELCOME / BOOT SCREEN */
+.boot-praise{margin:2px 0 14px;padding:12px 8px 10px;border-bottom:1px solid var(--green3);position:relative;overflow:hidden}
+.boot-praise::after{content:"";position:absolute;left:0;right:0;height:10%;top:-16%;background:rgba(142,255,151,.08);box-shadow:0 0 18px rgba(142,255,151,.18);animation:praiseSweep 1.6s linear infinite;pointer-events:none}
+.boot-praise-aquila{width:min(70%,250px);height:auto;fill:var(--green);opacity:.72;margin:0 auto 8px;display:block;filter:drop-shadow(0 0 6px rgba(93,255,91,.22));animation:praiseEmblem 1.2s steps(2,end) infinite}
+.boot-praise-text{font-size:clamp(22px,6.5vw,38px);line-height:.92;letter-spacing:2px;color:var(--green);min-height:1.9em;text-shadow:0 0 8px currentColor,0 0 18px rgba(94,255,116,.28)}
+.boot-praise-sub{font-size:7px;color:var(--green3);margin-top:6px;letter-spacing:.12em}
+
+@media (prefers-reduced-motion: reduce){
+  .panel,.screen::before,.screen::after,.screen .noise-layer,.panel.terminal-jolt,.screen.glitch-flash,.card.card-glitch,.screen.glitch-flash .glitch-scan{animation:none!important}
+}
+
+@media(max-width:390px){
+  body{padding:4px}
+  .panel{padding:8px}
+  .screen{padding:11px 8px}
+  .header{grid-template-columns:1fr 76px}
+  .aquila{width:76px;height:48px}
+  .layout{grid-template-columns:50px 1fr 50px;gap:5px}
+  .side{font-size:6.5px}
+  .card-area{min-height:270px}
+  .card{width:min(64vw,218px)}
+  .stats{gap:4px}
+  .stat{font-size:7px}
+  .stat b{font-size:15px}
+  button{font-size:11px;min-height:47px}
+}
+

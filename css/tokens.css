@@ -1,0 +1,70 @@
+/* tokens.css - Fonts, colour/size variables and the earliest rules. Order of the css/ files matters: they are slices of the original single stylesheet, later files override earlier ones. */
+@font-face {
+  font-family:'Star Crush';
+  src:url('../assets/fonts/star-crush.ttf') format('truetype');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+.logo,.frame-title,.boot-title,.boot-praise-text,.access-title,.praise-text,.card-label,h1,h2,h3 {
+  font-family:'Star Crush','Pixelify Sans',monospace !important;
+  letter-spacing:.075em;
+}
+
+.reinforcement-notice {
+  position:fixed;
+  left:50%;
+  top:18%;
+  transform:translate(-50%,-12px);
+  z-index:10050;
+  padding:14px 22px;
+  border:2px solid var(--green);
+  background:rgba(0,18,7,.96);
+  box-shadow:0 0 26px rgba(0,255,102,.24);
+  font-family:'Star Crush','Pixelify Sans',monospace !important;
+  font-size:clamp(16px,3.2vw,28px);
+  letter-spacing:.06em;
+  text-align:center;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.reinforcement-notice.active {
+  visibility:visible;
+  animation:reinforcementNotice 2.1s steps(5,end) forwards;
+}
+@keyframes reinforcementNotice {
+  0%{opacity:0;transform:translate(-50%,-12px)}
+  12%{opacity:1;transform:translate(-50%,0)}
+  76%{opacity:1;transform:translate(-50%,0)}
+  100%{opacity:0;transform:translate(-50%,8px)}
+}
+
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('../assets/fonts/pixelify-sans-400.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('../assets/fonts/pixelify-sans-700.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+}
+
+
+:root{
+  --bg:#010401;
+  --screen:#041006;
+  --green:#75ff68;
+  --green2:#44d64a;
+  --green3:#1f6826;
+  --green4:#0d3512;
+  --orange:#ff9a2f;
+  --orange2:#ff731c;
+  --metal:#1a1d18;
+  --black:#010201;
+}

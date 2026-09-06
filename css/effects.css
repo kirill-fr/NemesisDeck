@@ -1,0 +1,91 @@
+/* effects.css - Terminal glitch layer and continuous CRT noise/shake. */
+/* --- SUBTLE OLD TERMINAL GLITCH LAYER --- */
+.panel{will-change:transform,filter}
+.panel.terminal-jolt{animation:terminalJolt 110ms steps(2,end)}
+.screen.glitch-flash{animation:screenGlitch 150ms steps(2,end)}
+.card.card-glitch{animation:cardGlitch 170ms steps(2,end)}
+
+.screen .glitch-scan{
+  position:absolute;
+  z-index:20;
+  left:0;right:0;
+  height:2px;
+  background:rgba(120,255,130,.20);
+  box-shadow:0 0 8px rgba(90,255,100,.18);
+  opacity:0;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+.screen.glitch-flash .glitch-scan{animation:glitchScan 150ms steps(2,end)}
+
+@keyframes terminalJolt{
+  0%,100%{transform:translate(0,0)}
+  32%{transform:translate(-1px,0)}
+  58%{transform:translate(1px,-1px)}
+  78%{transform:translate(0,1px)}
+}
+@keyframes screenGlitch{
+  0%,100%{filter:none;transform:translate(0,0)}
+  30%{filter:contrast(1.08) brightness(1.03);transform:translateX(1px)}
+  58%{filter:contrast(.96) brightness(.97);transform:translateX(-1px)}
+}
+@keyframes cardGlitch{
+  0%,100%{transform:translate(0,0)}
+  26%{transform:translate(-2px,0) skewX(.35deg)}
+  49%{transform:translate(1px,1px)}
+  72%{transform:translate(0,-1px) skewX(-.25deg)}
+}
+@keyframes glitchScan{
+  0%{top:18%;opacity:0}
+  18%{opacity:.65}
+  48%{top:44%;opacity:.30}
+  72%{top:72%;opacity:.48}
+  100%{top:86%;opacity:0}
+}
+
+
+/* --- CONTINUOUS CRT NOISE / LIGHT IMAGE SHAKE --- */
+.screen::before{
+  animation:crtFlicker 4.6s steps(2,end) infinite;
+}
+.screen::after{
+  animation:scanDrift 8s linear infinite;
+}
+.panel{
+  animation:terminalBreath 5.8s steps(2,end) infinite;
+}
+.screen .noise-layer{
+  position:absolute;
+  inset:0;
+  z-index:18;
+  pointer-events:none;
+  opacity:.075;
+  mix-blend-mode:screen;
+  background-image:
+    repeating-radial-gradient(circle at 17% 23%, rgba(150,255,160,.55) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(93deg, rgba(150,255,160,.18) 0 1px, transparent 1px 4px);
+  background-size:5px 5px, 9px 7px;
+  animation:noiseShift .19s steps(2,end) infinite;
+}
+@keyframes noiseShift{
+  0%{transform:translate(0,0);background-position:0 0,0 0}
+  25%{transform:translate(-1px,1px);background-position:3px -2px,-4px 1px}
+  50%{transform:translate(1px,0);background-position:-2px 4px,2px -3px}
+  75%{transform:translate(0,-1px);background-position:4px 1px,-1px 3px}
+  100%{transform:translate(0,0);background-position:0 0,0 0}
+}
+@keyframes terminalBreath{
+  0%,82%,100%{transform:translate(0,0)}
+  84%{transform:translate(.35px,-.2px)}
+  86%{transform:translate(-.3px,.2px)}
+  88%{transform:translate(.2px,0)}
+}
+@keyframes crtFlicker{
+  0%,8%,10%,37%,39%,73%,75%,100%{opacity:1}
+  9%,38%,74%{opacity:.92}
+}
+@keyframes scanDrift{
+  from{background-position:0 0,0 0}
+  to{background-position:0 12px,0 0}
+}
+
