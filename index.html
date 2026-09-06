@@ -200,6 +200,14 @@
 
 <audio id="mechanicusTrack" preload="auto" playsinline src="assets/audio/mechanicus-sting.mp3"></audio>
 <audio id="bgTrack" loop preload="none" playsinline src="assets/audio/bg-loop.mp3"></audio>
+<div id="reinforcementNotice" class="reinforcement-notice">+1 NPO REINFORCEMENT POINT</div>
+
+<div id="threatIntroOverlay" class="threat-intro-overlay" aria-hidden="true">
+  <div class="threat-intro-box">
+    <div class="threat-intro-title">THREAT LEVEL</div>
+    <div id="threatIntroNumber" class="threat-intro-number">--</div>
+  </div>
+</div>
 
 <script>
 const reinforcementNotice = document.getElementById('reinforcementNotice');
@@ -614,14 +622,5 @@ selectMusic(true);
 prepareSequenceSetup();
 
 </script>
-<div id="reinforcementNotice" class="reinforcement-notice">+1 NPO REINFORCEMENT POINT</div>
-
-<div id="threatIntroOverlay" class="threat-intro-overlay" aria-hidden="true">
-  <div class="threat-intro-box">
-    <div class="threat-intro-title">THREAT LEVEL</div>
-    <div id="threatIntroNumber" class="threat-intro-number">--</div>
-  </div>
-</div>
-
 </body>
 </html>
