@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/effects.css">
 <link rel="stylesheet" href="css/boot.css">
 <link rel="stylesheet" href="css/terminal.css">
+<link rel="stylesheet" href="css/automa.css">
 </head>
 <body>
 <div class="panel">
@@ -61,6 +62,13 @@
           <div class="music-toggle">
             <button class="music-option selected" data-music="on">KEEP MUSIC</button>
             <button class="music-option" data-music="off">TURN MUSIC OFF</button>
+          </div>
+        </div>
+        <div class="music-question" id="modeQuestion">
+          <div class="music-question-title">SELECT OPERATING MODE</div>
+          <div class="music-toggle">
+            <button class="music-option mode-option selected" data-mode="classic">CLASSIC DECK</button>
+            <button class="music-option mode-option" data-mode="automa">JOINT OPS AUTOMA</button>
           </div>
         </div>
         <div class="boot-sub" id="deckPrompt">SELECT CARD COUNT // 10–16</div>
@@ -116,6 +124,24 @@
 
     <div class="frame-title pixel-text" id="frameTitle">IMPERIAL DATA TERMINAL // NPO-13</div>
 
+    <section id="automa" class="automa pixel-text" hidden aria-label="Joint Ops automa">
+      <div id="automaSetup" class="a-screen">
+        <div class="a-h pixel-text"><span>01 // SELECT ALLEGIANCE</span><b>NPO FORCE</b></div>
+        <div class="a-grid" id="aFactions"></div>
+        <div class="a-h pixel-text"><span>02 // SELECT MISSION</span><b>NEMESIS OPS</b></div>
+        <div class="a-list" id="aMissions"></div>
+        <div class="a-h pixel-text"><span>03 // DEPLOY NPO FORCE</span><b>STARTING POINTS</b></div>
+        <div class="a-force" id="aForce"></div>
+        <div class="a-total pixel-text" id="aTotal"></div>
+        <div class="a-note pixel-text" id="aPlacement"></div>
+        <section class="controls"><button id="aDeploy" disabled>DEPLOY</button></section>
+      </div>
+      <div id="automaGame" class="a-screen" hidden>
+        <div class="a-h pixel-text"><span>NPO FORCE</span><b>STANDING BY</b></div>
+        <div class="a-note pixel-text" id="aGameSummary"></div>
+        <div class="a-note pixel-text">TURNING POINT FLOW ARRIVES IN THE NEXT BUILD_</div>
+      </div>
+    </section>
     <section class="layout">
       <aside class="side pixel-text">
         <div class="side-box">

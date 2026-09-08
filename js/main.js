@@ -4,6 +4,7 @@ import { createDeck, clampSize, DEFAULT_SIZE } from './deck.js';
 import { sciFiSound } from './sfx.js';
 import { createTracks } from './tracks.js';
 import { createFx } from './fx.js';
+import { createAutomaUi } from './automa-ui.js';
 
 const $ = id => document.getElementById(id);
 const reinforcementNotice = $('reinforcementNotice');
@@ -23,7 +24,9 @@ const threatIntroValue = $('threatIntroValue');
 const threatValue = $('threatValue');
 const threatIntroOverlay = $('threatIntroOverlay');
 const threatIntroNumber = $('threatIntroNumber');
-const deckOptions = [...document.querySelectorAll('.deck-option')];
+const deckOptions = [...document.querySelectorAll('#deckPicker .deck-option')];
+const modeOptions = [...document.querySelectorAll('.mode-option')];
+const modeQuestion = $('modeQuestion');
 const musicOptions = [...document.querySelectorAll('.music-option')];
 const musicQuestion = $('musicQuestion');
 const deckPrompt = $('deckPrompt');
@@ -34,10 +37,12 @@ const bootPraiseTyped = $('bootPraiseTyped');
 const tracks = createTracks({ bgTrack: $('bgTrack'), mechanicusTrack: $('mechanicusTrack'), bootOverlay });
 const fx = createFx({ panel: document.querySelector('.panel'), screen: document.querySelector('.screen'), card });
 const terminalGlitch = fx.glitch;
+const automaUi = createAutomaUi({ bindPress, sfx: sciFiSound, glitch: fx.glitch, frameTitle });
 
 let totalCards = DEFAULT_SIZE;
 let game = null;            // createDeck() instance; null until INITIALIZE
 let musicEnabled = true;
+let mode = 'classic';         // 'classic' | 'automa'
 let gameSequence = 0;
 let praiseTypingTimer = null;
 let welcomePraisePlayed = false;
@@ -184,6 +189,27 @@ function selectMusic(enabled){
   terminalGlitch('light');
 }
 
+function selectMode(next){
+  mode = next === 'automa' ? 'automa' : 'classic';
+  modeOptions.forEach(b=>b.classList.toggle('selected', b.dataset.mode===mode));
+  const automa = mode==='automa';
+  if(deckPrompt) deckPrompt.style.display = automa ? 'none' : 'block';
+  document.getElementById('deckPicker').style.display = automa ? 'none' : 'grid';
+  bootConfirm.textContent = automa ? 'CONFIGURE AUTOMA' : 'INITIALIZE DECK // '+String(totalCards).padStart(2,'0');
+  bootStatus.textContent = automa ? 'MODE: JOINT OPS AUTOMA // CONFIGURE_' : 'MODE: CLASSIC DECK // SELECT DECK_';
+  sciFiSound('ui');
+  terminalGlitch('light');
+}
+
+function startAutoma(){
+  bootStatus.style.display='none';
+  bootOverlay.classList.add('hidden');
+  tracks.startBackground(musicEnabled);
+  sciFiSound('access');
+  terminalGlitch('card');
+  automaUi.start();
+}
+
 function prepareSequenceSetup(){
   gameSequence++;
   tracks.stopAll();
@@ -198,6 +224,7 @@ function prepareSequenceSetup(){
   document.querySelector('.boot-title').textContent='NPO TERMINAL BOOT // SEQUENCE '+String(gameSequence).padStart(2,'0');
   document.querySelector('.boot-sub').style.display='block';
   if(musicQuestion) musicQuestion.style.display='block';
+  if(modeQuestion) modeQuestion.style.display='block';
   if(deckPrompt) deckPrompt.style.display='block';
   accessSequence.classList.remove('active');
   threatReveal.classList.remove('active');
@@ -244,6 +271,7 @@ function initializeDeck(){
   if(bootPraise) bootPraise.style.display='none';
   document.querySelector('.boot-sub').style.display='none';
   if(musicQuestion) musicQuestion.style.display='none';
+  if(modeQuestion) modeQuestion.style.display='none';
   if(deckPrompt) deckPrompt.style.display='none';
   accessSequence.classList.add('active');
   threatReveal.classList.remove('active');
@@ -263,7 +291,8 @@ function initializeDeck(){
 
 musicOptions.forEach(btn=>bindPress(btn,()=>selectMusic(btn.dataset.music==='on')));
 deckOptions.forEach(btn=>bindPress(btn,()=>selectDeckSize(btn.dataset.count)));
-bindPress(bootConfirm, initializeDeck);
+modeOptions.forEach(btn=>bindPress(btn,()=>selectMode(btn.dataset.mode)));
+bindPress(bootConfirm, ()=> mode==='automa' ? startAutoma() : initializeDeck());
 
 bindPress(drawBtn, draw);
 bindPress(discardBtn, discardCurrent);
