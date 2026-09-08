@@ -33,3 +33,38 @@ body.mode-automa .screen > .controls{display:none}
   .a-grid{grid-template-columns:repeat(2,1fr)}
   .a-row{grid-template-columns:1fr auto 40px 30px 40px}
 }
+
+/* game screen */
+.a-status{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:8px;color:var(--green3);letter-spacing:.08em;text-align:center;border:1px solid var(--green3);padding:6px 2px;background:rgba(0,20,0,.26)}
+.a-status b{display:block;font-size:14px;color:var(--green);font-weight:400;margin-top:2px}
+.a-panel{display:flex;flex-direction:column;gap:10px}
+.a-lines{display:grid;gap:3px;font-size:9px;color:var(--green2);line-height:1.5;letter-spacing:.05em}
+.a-lines b{color:var(--orange);font-weight:400}
+.a-flags{display:grid;gap:5px}
+.a-flags .music-option{font-size:9px;min-height:36px;padding:0 8px}
+.a-cardwrap{display:grid;place-items:center;padding:6px 0 2px}
+.a-card{
+  width:min(63vw,236px);min-height:200px;position:relative;display:grid;place-items:center;gap:6px;padding:26px 10px 18px;
+  background:repeating-linear-gradient(to bottom,rgba(73,255,79,.035) 0 2px,transparent 2px 8px),#061108;
+  color:var(--green);border:2px solid var(--green2);
+  box-shadow:0 0 0 3px #020602,0 0 0 5px var(--green3),0 0 18px rgba(84,255,82,.13),inset 0 0 0 2px rgba(74,255,78,.07);
+}
+.a-card.drawn{color:var(--orange);border-color:var(--orange);box-shadow:0 0 0 3px #100801,0 0 0 5px #6a3410,0 0 22px rgba(255,129,30,.28),inset 0 0 0 2px rgba(255,141,36,.12)}
+.a-card-label{font-size:clamp(14px,4vw,20px);letter-spacing:.14em}
+.a-card-number{font-size:clamp(64px,18vw,96px);line-height:.85}
+.a-card-result{font-size:10px;line-height:1.5;text-align:center;letter-spacing:.06em;color:var(--green2)}
+.a-card.drawn .a-card-result{color:var(--orange)}
+.a-memo{display:grid;gap:6px;border:1px solid var(--green4);padding:8px;background:rgba(0,20,0,.26);font-size:9px;line-height:1.55;color:var(--green2);letter-spacing:.04em}
+.a-memo ol{margin:0;padding-left:16px}
+.a-memo li{margin:2px 0}
+.a-memo b{color:var(--green);font-weight:400}
+.a-memo .a-force{margin-top:2px}
+.a-spawn{grid-template-columns:1fr auto 88px}
+.a-spawn button{min-height:36px;padding:0 4px;font-size:9px;letter-spacing:.06em;white-space:nowrap;box-shadow:inset 0 0 0 2px #020602}
+.a-beh{display:grid;gap:4px}
+.a-beh summary{cursor:pointer;color:var(--green);list-style:none;padding:4px 0}
+.a-beh summary::before{content:"> ";color:var(--green3)}
+.a-beh details[open] summary::before{content:"v "}
+.a-yesno{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.a-yesno button{min-height:40px;font-size:10px}
+@media(max-width:390px){.a-status{font-size:7px}.a-status b{font-size:12px}}

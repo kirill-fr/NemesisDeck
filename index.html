@@ -137,9 +137,41 @@
         <section class="controls"><button id="aDeploy" disabled>DEPLOY</button></section>
       </div>
       <div id="automaGame" class="a-screen" hidden>
-        <div class="a-h pixel-text"><span>NPO FORCE</span><b>STANDING BY</b></div>
-        <div class="a-note pixel-text" id="aGameSummary"></div>
-        <div class="a-note pixel-text">TURNING POINT FLOW ARRIVES IN THE NEXT BUILD_</div>
+        <div class="a-status pixel-text">
+          <span>TP <b id="aTp">00</b></span>
+          <span>INITIATIVE <b id="aInit">--</b></span>
+          <span>POOL <b id="aPool">0</b> PTS</span>
+          <span>NPO <b id="aOnBoard">00</b></span>
+        </div>
+
+        <div id="aStrategy" class="a-panel">
+          <div class="a-h pixel-text"><span>STRATEGY PHASE</span><b>NPO GAMBITS</b></div>
+          <div class="a-lines pixel-text" id="aStrategyLines"></div>
+          <div class="a-tie" id="aTie" hidden>
+            <div class="a-note pixel-text">ROLL-OFF TIED // THE SIDE WITHOUT INITIATIVE LAST TP DECIDES</div>
+            <div class="music-toggle"><button class="music-option" data-init="players">PLAYERS TAKE IT</button><button class="music-option" data-init="npo">NPO TAKE IT</button></div>
+          </div>
+          <div class="a-flags" id="aFlags" hidden></div>
+          <div class="a-h pixel-text"><span>REINFORCEMENTS</span><b id="aSpawnHint">SPEND THE POOL</b></div>
+          <div class="a-force" id="aSpawnList"></div>
+          <div class="a-note pixel-text" id="aPlacementGame"></div>
+          <section class="controls"><button id="aBeginFirefight">BEGIN FIREFIGHT</button></section>
+        </div>
+
+        <div id="aFirefight" class="a-panel" hidden>
+          <div class="a-cardwrap">
+            <div class="a-card pixel-text" id="aCard">
+              <span class="corner tl">+</span><span class="corner tr">+</span>
+              <span class="corner bl">+</span><span class="corner br">+</span>
+              <div class="a-card-label">CARD</div>
+              <div class="a-card-number" id="aCardNum">--</div>
+              <div class="a-card-result" id="aResult">PRESS NPO TURN<br><span class="blink">_</span></div>
+            </div>
+          </div>
+          <div class="a-memo pixel-text" id="aMemo"></div>
+          <div class="a-h pixel-text"><span>DISCARD <b id="aDiscard">—</b></span><b>DECK <span id="aDeckLeft">13</span></b></div>
+          <section class="controls"><button id="aNpoTurn">NPO TURN</button><button id="aEndTp">END TURNING POINT</button></section>
+        </div>
       </div>
     </section>
     <section class="layout">
