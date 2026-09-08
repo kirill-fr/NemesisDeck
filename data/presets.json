@@ -1,0 +1,97 @@
+{
+  "$schema": "presets.v1",
+  "source": "Joint Ops: Nemesis Operatives mission pack, played without a NEMESIS operative (cards 11-13 have no effect by the book; the automa lets you reassign them).",
+  "missions": [
+    {
+      "id": "erosion-of-power",
+      "name": "01 Erosion of Power",
+      "startingPoints": 15,
+      "gambit": { "d3": 1 },
+      "npoLimit": 10,
+      "placement": "Ready, Conceal order, base touching the NPO killzone edge.",
+      "table": [
+        { "from": 1, "to": 8, "result": "activate" },
+        { "from": 9, "to": 10, "result": "reinforce", "points": 1 },
+        { "from": 11, "to": 13, "result": "skip", "note": "NEMESIS activation. No NEMESIS in play: skip." }
+      ],
+      "notes": [
+        "SABOTAGE NEXUS (1AP): a controlled objective is sabotaged until end of TP. Third Sabotage Nexus in a TP gives 1 Sabotage point.",
+        "Spend 1 Sabotage point to discard a drawn activation card unresolved and skip that NPO activation.",
+        "Battle ends after TP4. 1 VP per Sabotage Nexus. 7-9 major win, 5-6 minor win, 3-4 minor loss, 0-2 major loss."
+      ],
+      "next": { "majorWin": "strongpoint-assault", "minorWin": "outmanoeuvre", "minorLoss": "ambush", "majorLoss": "strongpoint-assault" }
+    },
+    {
+      "id": "outmanoeuvre",
+      "name": "02 Outmanoeuvre",
+      "startingPoints": 14,
+      "gambit": { "d3": 1 },
+      "npoLimit": 10,
+      "placement": "Ready, Conceal order, base touching the NPO killzone edge.",
+      "table": [
+        { "from": 1, "to": 8, "result": "activate" },
+        { "from": 9, "to": 9, "result": "reinforce", "points": { "if": "playersControlObjective", "then": -1, "else": 1 }, "then": "activate",
+          "note": "Players control an objective: remove 1 point from the pool. Otherwise add 1 (do not set up yet). Then activate one NPO." },
+        { "from": 10, "to": 10, "result": "reinforce", "points": 1 },
+        { "from": 11, "to": 13, "result": "skip", "note": "NEMESIS activation. No NEMESIS in play: skip." }
+      ],
+      "notes": [
+        "Half the player operatives set up outflanking. TP2 gambit: choose a neutral edge as the outflank edge, remove the nearest objective in player territory.",
+        "Players may end the battle at the end of any TP after the third. Control two objectives and contest the third: win. Control two only: minor loss. One or fewer: major loss."
+      ],
+      "next": { "majorWin": "strongpoint-assault", "minorLoss": "erosion-of-power", "majorLoss": "ambush" }
+    },
+    {
+      "id": "ambush",
+      "name": "03 Ambush",
+      "startingPoints": 13,
+      "gambit": { "fixed": 1 },
+      "gambitWhen": [ { "flag": "extractionDone", "gambit": { "d3": 1 } } ],
+      "npoLimit": 10,
+      "placement": "Ready, Conceal order, base touching the NPO killzone edge. Ambush Advantage: NPOs set up this TP have Accurate 1.",
+      "table": [
+        { "from": 1, "to": 7, "result": "activate" },
+        { "from": 8, "to": 9, "result": "reinforce", "points": { "if": "extractionDone", "then": 2, "else": 1 } },
+        { "from": 10, "to": 13, "result": "skip", "note": "NEMESIS activation. No NEMESIS in play: skip." }
+      ],
+      "flags": [ { "id": "extractionDone", "label": "COORDINATE EXTRACTION performed" } ],
+      "notes": [
+        "COORDINATE EXTRACTION (1AP): randomly determine one non-player killzone edge as the escape edge. Once per battle, not in TP1.",
+        "Battle ends when every player operative is incapacitated or escaped. 3/4 escaped: major win. 1/2: minor win. Less: major loss."
+      ],
+      "next": { "majorWin": "outmanoeuvre", "minorWin": "erosion-of-power", "majorLoss": "strongpoint-assault" }
+    },
+    {
+      "id": "strongpoint-assault",
+      "name": "04 Strongpoint Assault",
+      "startingPoints": 13,
+      "gambit": { "d3": 1 },
+      "npoLimit": 10,
+      "placement": "NPOs on Offence: ready, Conceal, wholly within the Offence drop zone. NPOs on Defence: ready, Conceal, within the Base area with the Defence killzone edge in control range.",
+      "table": [
+        { "from": 1, "to": 7, "result": "activate" },
+        { "from": 8, "to": 9, "result": "reinforce", "points": 1 },
+        { "from": 10, "to": 13, "result": "skip", "note": "NEMESIS activation. No NEMESIS in play: skip." }
+      ],
+      "notes": [
+        "Two objective markers start at location 1. End of each TP: Offence controls a marker, move it forward; Defence controls it, move it back.",
+        "Battle ends after TP5. A marker at location 3: Offence major win. None at 3 but both at 2: Defence minor win. Otherwise Defence major win."
+      ],
+      "next": { "offenceMajorWin": "campaign-win", "offenceMinorLoss": "outmanoeuvre", "offenceMajorLoss": "erosion-of-power", "defenceMajorWin": "erosion-of-power", "defenceMinorWin": "ambush", "defenceMajorLoss": "campaign-loss" }
+    }
+  ],
+  "custom": {
+    "id": "custom",
+    "name": "Custom",
+    "startingPoints": 15,
+    "gambit": { "d3": 1 },
+    "npoLimit": 10,
+    "placement": "Ready, Conceal order, base touching the NPO killzone edge.",
+    "table": [
+      { "from": 1, "to": 8, "result": "activate" },
+      { "from": 9, "to": 10, "result": "reinforce", "points": 1 },
+      { "from": 11, "to": 13, "result": "event", "note": "Free slot: NPO event card." }
+    ],
+    "notes": []
+  }
+}
