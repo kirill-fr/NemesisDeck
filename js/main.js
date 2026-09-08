@@ -16,6 +16,7 @@ const discardBtn = $('discardBtn');
 const restartBtn = $('restartBtn');
 const bootOverlay = $('bootOverlay');
 const bootConfirm = $('bootConfirm');
+const bootContinue = $('bootContinue');
 const bootStatus = $('bootStatus');
 const frameTitle = $('frameTitle');
 const accessSequence = $('accessSequence');
@@ -201,13 +202,20 @@ function selectMode(next){
   terminalGlitch('light');
 }
 
-function startAutoma(){
+function startAutoma(resume){
   bootStatus.style.display='none';
   bootOverlay.classList.add('hidden');
   tracks.startBackground(musicEnabled);
   sciFiSound('access');
   terminalGlitch('card');
-  automaUi.start();
+  if(resume) automaUi.resume().then(ok => { if(!ok) automaUi.start(); });
+  else automaUi.start();
+}
+
+function showContinue(){
+  const saved = automaUi.hasSave();
+  bootContinue.hidden = !saved;
+  if(saved) bootContinue.textContent = 'CONTINUE AUTOMA // TP '+String(saved.tp).padStart(2,'0');
 }
 
 function prepareSequenceSetup(){
@@ -266,6 +274,7 @@ function initializeDeck(){
   bootStatus.style.display='none';
   document.getElementById('deckPicker').style.display='none';
   bootConfirm.style.display='none';
+  bootContinue.hidden=true;
   document.querySelector('.boot-title').style.display='none';
   const bootPraise = document.getElementById('bootPraise');
   if(bootPraise) bootPraise.style.display='none';
@@ -292,7 +301,9 @@ function initializeDeck(){
 musicOptions.forEach(btn=>bindPress(btn,()=>selectMusic(btn.dataset.music==='on')));
 deckOptions.forEach(btn=>bindPress(btn,()=>selectDeckSize(btn.dataset.count)));
 modeOptions.forEach(btn=>bindPress(btn,()=>selectMode(btn.dataset.mode)));
-bindPress(bootConfirm, ()=> mode==='automa' ? startAutoma() : initializeDeck());
+bindPress(bootConfirm, ()=> mode==='automa' ? startAutoma(false) : initializeDeck());
+bindPress(bootContinue, ()=> startAutoma(true));
+showContinue();
 
 bindPress(drawBtn, draw);
 bindPress(discardBtn, discardCurrent);

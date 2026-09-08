@@ -19,6 +19,13 @@ const QUESTIONS = {
   extractionDone: 'HAS A PLAYER OPERATIVE PERFORMED COORDINATE EXTRACTION?',
 };
 
+const SAVE_KEY = 'nemesisdeck.automa.v1';
+const storage = {
+  get(){ try{ return JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){ return null; } },
+  set(v){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(v)); }catch(e){} },
+  clear(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} },
+};
+
 export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   const root = $('automa');
   const setup = $('automaSetup');
@@ -29,6 +36,21 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   let counts = {};               // npoId -> number
   let automa = null;
   let lastInitiative = 'players';
+  let lastResult = null;         // last resolved card, re-shown after a reload
+  let restoring = false;
+
+  // --- persistence ----------------------------------------------------------
+  function save(){
+    if(!automa || restoring) return;
+    const s = automa.state();
+    storage.set({
+      v: 1, faction: faction.id, mission: mission.id, tp: s.tp, engine: automa.serialize(),
+      ui: { panel: s.phase === 'firefight' ? 'firefight' : 'strategy', lastInitiative, lastResult,
+            strategyLines: $('aStrategyLines').innerHTML, tieOpen: !$('aTie').hidden },
+    });
+  }
+  function hasSave(){ const v = storage.get(); return v && v.v === 1 ? { tp: v.tp, mission: v.mission } : null; }
+  function abandon(){ storage.clear(); location.reload(); }
 
   async function load(){
     if(data) return data;
@@ -93,6 +115,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     frameTitle.textContent = `JOINT OPS // ${mission.name.toUpperCase()} // TP ${pad(s.tp)}`;
     $('aDiscard').textContent = s.discard.length ? s.discard.map(pad).join(' ') : '—';
     $('aDeckLeft').textContent = s.deckRemaining;
+    save();
     return s;
   }
 
@@ -122,6 +145,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   }
 
   function strategyPhase(){
+    lastResult = null;
     const t = automa.startTurningPoint();
     const lines = [];
     if(t.tp === 1) lines.push(`FIRST TURNING POINT // <b>PLAYERS</b> HAVE INITIATIVE`);
@@ -155,6 +179,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
 
   function beginFirefight(){
     automa.startFirefight();
+    lastResult = null;
     $('aStrategy').hidden = true; $('aFirefight').hidden = false;
     const card = $('aCard'); card.classList.remove('drawn');
     $('aCardNum').textContent = '--';
@@ -175,6 +200,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   }
 
   function showResult(r){
+    lastResult = r.pending ? null : r;
     const card = $('aCard');
     card.classList.remove('drawn'); void card.offsetWidth; card.classList.add('drawn');
     $('aCardNum').textContent = pad(r.card);
@@ -248,6 +274,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     el.querySelectorAll('[data-wdec]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setWounds(u.uid, u.wounds - 1); sfx(u.wounds - 1 <= 0 ? 'discard' : 'ui'); if(u.wounds - 1 <= 0) glitch('card'); renderRoster(); status(); }));
     el.querySelectorAll('[data-winc]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setWounds(u.uid, u.wounds + 1); sfx('ui'); renderRoster(); }));
     el.querySelectorAll('[data-card]').forEach(b => bindPress(b, () => openDatacard(b.dataset.card)));
+    save();
   }
   function openRoster(){ renderRoster(); $('aRoster').hidden = false; sfx('ui'); glitch('light'); }
   function closeRoster(){ $('aRoster').hidden = true; sfx('ui'); readyRows(); status(); }
@@ -288,6 +315,40 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     return automa;
   }
 
+  async function resume(){
+    const v = storage.get();
+    if(!v || v.v !== 1) return false;
+    await load();
+    faction = data.npo.factions.find(f => f.id === v.faction);
+    mission = [...data.presets.missions, data.presets.custom].find(m => m.id === v.mission);
+    if(!faction || !mission) return false;
+    restoring = true;
+    automa = createAutoma({ config: { faction: faction.id, ...mission }, npoCatalog: faction.units });
+    automa.restore(v.engine);
+    lastInitiative = v.ui.lastInitiative || 'players';
+    document.body.classList.add('mode-automa');
+    root.hidden = false; setup.hidden = true; game.hidden = false;
+    const s = automa.state();
+    if(v.ui.panel === 'strategy'){
+      $('aStrategyLines').innerHTML = v.ui.strategyLines || '';
+      $('aTie').hidden = !v.ui.tieOpen; $('aBeginFirefight').disabled = !!v.ui.tieOpen;
+      renderFlags(); spawnRows(automa.affordable(), $('aSpawnList'));
+      $('aSpawnHint').textContent = s.pool ? `POOL ${pts(s.pool)} PTS` : 'POOL EMPTY';
+      $('aPlacementGame').textContent = mission.placement || '';
+      $('aStrategy').hidden = false; $('aFirefight').hidden = true;
+    }else{
+      $('aStrategy').hidden = true; $('aFirefight').hidden = false;
+      $('aCard').classList.remove('drawn'); $('aCardNum').textContent = '--';
+      $('aResult').innerHTML = 'PRESS NPO TURN<br><span class="blink">_</span>';
+      $('aMemo').innerHTML = `<div>SESSION RESTORED // TP <b>${pad(s.tp)}</b> FIREFIGHT PHASE</div>`;
+      if(s.pending) showResult(automa.npoTurn());
+      else if(v.ui.lastResult) showResult(v.ui.lastResult);
+    }
+    restoring = false;
+    status();
+    return true;
+  }
+
   async function start(){
     await load();
     document.body.classList.add('mode-automa');
@@ -305,5 +366,6 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   bindPress($('aRosterClose'), closeRoster);
   bindPress($('aExpendAll'), () => { automa.expendAll(); sfx('discard'); renderRoster(); });
   document.querySelectorAll('#aTie [data-init]').forEach(b => bindPress(b, () => decideTie(b.dataset.init)));
-  return { start, load, get automa(){ return automa; } };
+  bindPress($('aAbandon'), abandon);
+  return { start, resume, hasSave, load, get automa(){ return automa; } };
 }
