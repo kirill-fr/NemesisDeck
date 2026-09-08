@@ -1,0 +1,1793 @@
+{
+ "$schema": "npo.v1",
+ "source": "Kill Team: Nemesis Operatives datacards (2025), transcribed for home use",
+ "behaviours": {
+  "Brawler": {
+   "colour": "#d7262c",
+   "desc": "This NPO will move towards the enemy to fight them, but will seek cover on its way. When activated, if it's a **NEMESIS** NPO or will perform the **Fight** or **Charge** action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+   "steps": [
+    "**Fight**.",
+    "**Charge** the closest player operative via the shortest possible route.",
+    "**Reposition** towards the closest player operative, to cover if possible (a subsequent **Dash** action can fulfil this).",
+    "**Dash** towards the closest player operative, to cover if possible."
+   ]
+  },
+  "Marksman": {
+   "colour": "#2a6fd6",
+   "desc": "This NPO will move to an ideal position to shoot the enemy. When activated, if it's a **NEMESIS** NPO or will perform the **Shoot** action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+   "steps": [
+    "**Fall Back**. If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission.",
+    "**Shoot**.",
+    "**Reposition**. If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission (a subsequent **Dash** action can fulfil these).",
+    "**Dash**. If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission."
+   ]
+  },
+  "Battler": {
+   "colour": "#d98a12",
+   "desc": "This NPO will move towards the enemy to fight them, but will seek cover on its way, and will shoot if the need arises. When activated, if it's a **NEMESIS** NPO or will perform the **Fight**, **Charge** or **Shoot** action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+   "steps": [
+    "**Fight**.",
+    "**Charge** the closest player operative via the shortest possible route.",
+    "**Reposition** towards the closest player operative, to cover if possible (a subsequent **Dash** action can fulfil this).",
+    "**Shoot**.",
+    "**Dash** towards the closest player operative, to cover if possible."
+   ]
+  },
+  "Guardian": {
+   "colour": "#2f9e57",
+   "desc": "This NPO will shoot the enemy as a priority, but will fight if the need arises. When activated, if it's a **NEMESIS** NPO or will perform the **Fight**, **Charge** or **Shoot** action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+   "steps": [
+    "**Fight**.",
+    "**Shoot**.",
+    "**Charge** the closest player operative that's within 4″ of it via the shortest possible route.",
+    "**Reposition**. If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission (a subsequent **Dash** action can fulfil these).",
+    "**Dash**. If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission."
+   ]
+  }
+ },
+ "factions": [
+  {
+   "id": "tyranid",
+   "name": "Tyranids",
+   "colour": "#b04ab0",
+   "trait": {
+    "title": "Will of the Hive Mind",
+    "flavour": "The gestalt consciousness of the Hive Mind links the Tyranids, overriding their instincts and driving them onwards to fulfil its alien imperatives.",
+    "rules": [
+     "Ignore the changes to **TYRANID** NPO and friendly **TYRANID NEMESIS** operatives' stats from being injured (including their weapons' stats)."
+    ]
+   },
+   "units": [
+    {
+     "id": "termagant",
+     "name": "Termagant",
+     "keywords": [
+      "Tyranid",
+      "Termagant"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Fleshborer",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Claws & teeth",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": []
+    },
+    {
+     "id": "hormagaunt",
+     "name": "Hormagaunt",
+     "keywords": [
+      "Tyranid",
+      "Hormagaunt"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "melee",
+       "name": "Scything talons",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Brawler.",
+     "rules": []
+    },
+    {
+     "id": "genestealer",
+     "name": "Genestealer",
+     "keywords": [
+      "Tyranid",
+      "Genestealer"
+     ],
+     "apl": 2,
+     "move": "7″",
+     "save": "5+",
+     "wounds": 9,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "melee",
+       "name": "Rending claws",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Rending",
+       "optional": false
+      }
+     ],
+     "behaviour": "Brawler.",
+     "rules": [
+      {
+       "title": "Lightning Reflexes",
+       "text": "Whenever this NPO is fighting, worsen the Hit stat of the enemy operative's weapons by 1 (to a minimum of 5+)."
+      }
+     ]
+    },
+    {
+     "id": "acolyte-hybrid",
+     "name": "Acolyte Hybrid",
+     "keywords": [
+      "Tyranid",
+      "Genestealer Cult",
+      "Acolyte Hybrid"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "4+",
+     "wounds": 9,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Autopistol",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "Range 8″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Demolition charge",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "Range 3″, Blast 2″, Heavy (Reposition only), Limited 1, Piercing 1, Saturate",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Hand flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 6″, Saturate, Torrent 1″",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Cult claws & knife",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Rending",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Heavy mining tool",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "Brutal, Rending",
+       "optional": false
+      }
+     ],
+     "behaviour": "Battler, or Brawler if this NPO has a heavy mining tool.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has an autopistol and cult claws & knife. 1 in 3 can have either a heavy mining tool instead of those options, or a demolition charge or a hand flamer instead of an autopistol."
+      }
+     ]
+    },
+    {
+     "id": "neophyte-hybrid",
+     "name": "Neophyte Hybrid",
+     "keywords": [
+      "Tyranid",
+      "Genestealer Cult",
+      "Neophyte Hybrid"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Autogun",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Saturate, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Grenade launcher (frag)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/4",
+       "rules": "Blast 2″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Grenade launcher (krak)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy stubber (focused)",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Heavy (Dash only)",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy stubber (sweeping)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Heavy (Dash only), Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Mining laser",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "5/6",
+       "rules": "Heavy (Dash only), Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Seismic cannon (short-wave)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/4",
+       "rules": "Range 6″, Heavy (Dash only), Piercing Crits 1, Stun",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Seismic cannon (long-wave)",
+       "atk": 6,
+       "hit": "4+",
+       "dmg": "2/2",
+       "rules": "Blast 1″, Heavy (Dash only), Stun",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Shotgun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/3",
+       "rules": "Range 6″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Webber",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Range 12″, Severe, Stun",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Gun butt",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman. If this NPO has a weapon with the Heavy (Dash only) weapon rule, it will perform the Dash action before the Reposition action.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a gun butt and either an autogun or a shotgun. 1 in 3 can have a ranged weapon marked with an asterisk (*) instead of an autogun or a shotgun. Note that if a weapon with an asterisk has multiple profiles, it's still the same ranged weapon."
+      }
+     ]
+    },
+    {
+     "id": "aberrant",
+     "name": "Aberrant",
+     "keywords": [
+      "Tyranid",
+      "Genestealer Cult",
+      "Aberrant"
+     ],
+     "apl": 3,
+     "move": "6″",
+     "save": "4+",
+     "wounds": 16,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "melee",
+       "name": "Aberrant weapons",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "5/6",
+       "rules": "Brutal, Ceaseless",
+       "optional": false
+      }
+     ],
+     "behaviour": "Brawler.",
+     "rules": [
+      {
+       "title": "Aberrant",
+       "text": "This NPO can perform two Fight actions during each of its activations."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ork",
+   "name": "Orks",
+   "colour": "#5aa02c",
+   "trait": {
+    "title": "Waaagh!",
+    "flavour": "The infamous war cry of the Orks is known and feared throughout the galaxy. When these violent aliens are riled up with enthusiastic brutality, even the most stalwart warriors fear the onslaught to come.",
+    "rules": [
+     "Whenever an **ORK** NPO is fighting, its weapons have the Balanced weapon rule. Worsen the Hit stat of **ORK NEMESIS** operatives' ranged weapons by 1, but their melee weapons have the Severe weapon rule."
+    ]
+   },
+   "units": [
+    {
+     "id": "gretchin",
+     "name": "Gretchin",
+     "keywords": [
+      "Ork",
+      "Gretchin"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "6+",
+     "wounds": 5,
+     "points": 0.5,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Grot blasta",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "Range 8″",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Grot knife",
+       "atk": 3,
+       "hit": "5+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Small",
+       "text": "Whenever this NPO has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2″."
+      }
+     ]
+    },
+    {
+     "id": "boy",
+     "name": "Boy",
+     "keywords": [
+      "Ork",
+      "Boy"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 10,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Big shoota",
+       "atk": 5,
+       "hit": "5+",
+       "dmg": "4/5",
+       "rules": "Heavy (Reposition only), Punishing, Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Rokkit launcha",
+       "atk": 4,
+       "hit": "5+",
+       "dmg": "4/5",
+       "rules": "Blast 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Shoota",
+       "atk": 4,
+       "hit": "5+",
+       "dmg": "3/4",
+       "rules": "Punishing",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Slugga",
+       "atk": 4,
+       "hit": "5+",
+       "dmg": "3/4",
+       "rules": "Range 8″, Punishing",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Choppa",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Battler, or Guardian if this NPO has a weapon marked with an asterisk (*).",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has either a slugga and choppa or a shoota and fists. 1 in 5 can have their shoota replaced with a ranged weapon marked with an asterisk (*)."
+      }
+     ]
+    },
+    {
+     "id": "nob",
+     "name": "Nob",
+     "keywords": [
+      "Ork",
+      "Nob"
+     ],
+     "apl": 3,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 16,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Kustom shoota",
+       "atk": 5,
+       "hit": "5+",
+       "dmg": "3/4",
+       "rules": "Relentless",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Big choppa",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "5/6",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Power klaw",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "5/7",
+       "rules": "Brutal, Shock",
+       "optional": false
+      }
+     ],
+     "behaviour": "Battler.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a kustom shoota and either a big choppa or a power klaw."
+      },
+      {
+       "title": "Nobz",
+       "text": "This NPO can perform two Fight or two Shoot actions during each of its activations."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tau",
+   "name": "T'au Empire",
+   "colour": "#e0872a",
+   "trait": {
+    "title": "Supporting Fire",
+    "flavour": "The burning commitment of the T'au to their creed of the Greater Good allows for effective coordination of incredibly accurate firepower.",
+    "rules": [
+     "Whenever a **T'AU EMPIRE** NPO operative is within 3″ of another, its ranged weapons have the Accurate 1 weapon rule.",
+     "Whenever a friendly **T'AU EMPIRE NEMESIS** operative is within 3″ of another friendly **T'AU EMPIRE** operative, that **NEMESIS** operative's ranged weapons have the Accurate 1 weapon rule."
+    ]
+   },
+   "units": [
+    {
+     "id": "fire-warrior",
+     "name": "Fire Warrior",
+     "keywords": [
+      "T'au Empire",
+      "Fire Warrior"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "4+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Pulse blaster",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/4",
+       "rules": "Range 8″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Pulse rifle (stationary)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Balanced, Heavy",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Pulse rifle (mobile)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Gun butt",
+       "atk": 3,
+       "hit": "5+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has gun butt and either a pulse blaster or a pulse rifle."
+      }
+     ]
+    },
+    {
+     "id": "xv26-stealth-battlesuit",
+     "name": "XV26 Stealth Battlesuit",
+     "keywords": [
+      "T'au Empire",
+      "XV26 Stealth Battlesuit"
+     ],
+     "apl": 3,
+     "move": "6″",
+     "save": "3+",
+     "wounds": 12,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Burst cannon (focused)",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "Ceaseless",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Burst cannon (sweeping)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "Ceaseless, Torrent 1″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Fusion blaster (short range)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "6/3",
+       "rules": "Range 6″, Devastating 4, Piercing 2",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Fusion blaster (long range)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Range 12″, Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a burst cannon and fists. 1 in 3 can have a fusion blaster instead of a burst cannon."
+      },
+      {
+       "title": "Stealth Field",
+       "text": "Whenever this NPO has a Conceal order, it's not visible to enemy operatives more than 3″ from it (this takes precedence over all other rules)."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "aeldari",
+   "name": "Aeldari",
+   "colour": "#21b3a6",
+   "trait": {
+    "title": "Arrogant Superiority",
+    "flavour": "No matter which strand of their ancient species the Aeldari hail from, all possess the ingrained belief in their own superiority over the galaxy's other peoples, founded on their athletic poise and effortless skill.",
+    "rules": [
+     "Whenever an **AELDARI** NPO or friendly **AELDARI NEMESIS** operative is shooting against or fighting against a ready enemy operative, if two or more fails are rolled for it, one of them can be discarded to re-roll another."
+    ]
+   },
+   "units": [
+    {
+     "id": "guardian",
+     "name": "Guardian",
+     "keywords": [
+      "Aeldari",
+      "Asuryani",
+      "Guardian"
+     ],
+     "apl": 2,
+     "move": "7″",
+     "save": "4+",
+     "wounds": 8,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Saturate, Torrent 2″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Fusion gun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "6/3",
+       "rules": "Range 6″, Devastating 4, Piercing 2",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Shuriken catapult",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Rending",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Shuriken pistol",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Range 8″, Rending",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "3+",
+       "dmg": "2/4",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Power weapon",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "Lethal 5+",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Sword",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman, or Battler if this NPO has a shuriken pistol.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has either a shuriken catapult and fists or a shuriken pistol and sword. 1 in 5 can have a flamer or fusion gun instead of a shuriken catapult, and 1 in 5 can have a power weapon instead of a sword."
+      }
+     ]
+    },
+    {
+     "id": "wych",
+     "name": "Wych",
+     "keywords": [
+      "Aeldari",
+      "Drukhari",
+      "Wych"
+     ],
+     "apl": 2,
+     "move": "7″",
+     "save": "5+",
+     "wounds": 8,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Splinter pistol",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "2/4",
+       "rules": "Range 8″, Lethal 5+",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Hekatarii blade",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Lethal 5+",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Hydra gauntlets",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Razorflails",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Brutal",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Shardnet & impaler",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Brutal",
+       "optional": true
+      }
+     ],
+     "behaviour": "Battler, or Brawler if this NPO has a weapon marked with an asterisk (*).",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a splinter pistol and hekatarii blade. 1 in 3 can have a melee weapon marked with an asterisk (*) instead of a splinter pistol and hekatarii blade."
+      },
+      {
+       "title": "Murderous Dexterity",
+       "text": "Whenever this NPO is fighting or retaliating, its opponent cannot re-roll their attack dice."
+      }
+     ]
+    },
+    {
+     "id": "kabalite-warrior",
+     "name": "Kabalite Warrior",
+     "keywords": [
+      "Aeldari",
+      "Drukhari",
+      "Kabalite Warrior"
+     ],
+     "apl": 2,
+     "move": "7″",
+     "save": "4+",
+     "wounds": 8,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Blaster",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Dark lance",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "6/7",
+       "rules": "Heavy (Dash only), Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Shredder",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Rending, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Splinter cannon (focused)",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Heavy (Dash only), Lethal 5+",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Splinter cannon (sweeping)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Heavy (Dash only), Lethal 5+, Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Splinter rifle",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "2/4",
+       "rules": "Lethal 5+",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Array of blades",
+       "atk": 3,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman. If this NPO has a weapon with the Heavy (Dash only) weapon rule, it will perform the Dash action before the Reposition action.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a splinter rifle and array of blades. 1 in 5 can have a ranged weapon marked with an asterisk (*) instead of a splinter rifle. Note that if a weapon with an asterisk has multiple profiles, it's still the same ranged weapon."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "chaos",
+   "name": "Chaos",
+   "colour": "#c41e3a",
+   "trait": {
+    "title": "Let the Galaxy Burn",
+    "flavour": "The conquest and destruction of all that their enemies value is a hallmark of those who worship the Dark Gods of Chaos, their festering bitterness and hatred leading them to acts of utter despoilation.",
+    "rules": [
+     "Whenever a **CHAOS** NPO or friendly **CHAOS NEMESIS** operative is wholly within enemy territory, its weapons have the Balanced weapon rule."
+    ]
+   },
+   "units": [
+    {
+     "id": "chaos-cultist",
+     "name": "Chaos Cultist",
+     "keywords": [
+      "Chaos",
+      "Cultist"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Pistol",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "Range 8″",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Close combat weapon",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Battler.",
+     "rules": [
+      {
+       "title": "Mob",
+       "text": "Whenever this NPO is within 3″ of any other friendly CULTIST NPOs, add 1 to both Dmg stats of this NPO's weapons and they have the Accurate 1 weapon rule."
+      }
+     ]
+    },
+    {
+     "id": "lesser-daemon",
+     "name": "Lesser Daemon",
+     "keywords": [
+      "Chaos",
+      "Lesser Daemon"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "4+",
+     "wounds": 10,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "melee",
+       "name": "Daemonic weapon",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Lethal 5+",
+       "optional": false
+      }
+     ],
+     "behaviour": "Brawler.",
+     "rules": []
+    },
+    {
+     "id": "legionary",
+     "name": "Legionary",
+     "keywords": [
+      "Chaos",
+      "Legionary"
+     ],
+     "apl": 3,
+     "move": "6″",
+     "save": "3+",
+     "wounds": 14,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Bolt pistol",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Range 8″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Boltgun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Saturate, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy bolter (focused)",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Heavy (Reposition only), Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy bolter (sweeping)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Heavy (Reposition only), Piercing Crits 1, Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Meltagun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "6/3",
+       "rules": "Range 6″, Devastating 4, Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Missile launcher (frag)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/5",
+       "rules": "Blast 2″, Heavy (Reposition only)",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Missile launcher (krak)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "5/7",
+       "rules": "Heavy (Reposition only), Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Plasma gun (standard)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Plasma gun (supercharge)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "5/6",
+       "rules": "Hot, Lethal 5+, Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Reaper chaincannon (focused)",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Ceaseless, Heavy (Reposition only), Punishing",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Reaper chaincannon (sweeping)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Ceaseless, Heavy (Reposition only), Punishing, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Chainsword",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Battler, or Guardian if this NPO has a weapon marked with an asterisk (*).",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has either a boltgun and fists or a bolt pistol and chainsword. 1 in 5 can have a ranged weapon marked with an asterisk (*) instead of a boltgun. Note that if a weapon with an asterisk has multiple profiles, it's still the same ranged weapon."
+      },
+      {
+       "title": "Astartes",
+       "text": "This NPO can perform two Fight or two Shoot actions during each of its activations. If it's two Shoot actions, a bolt pistol or boltgun must be selected for both of them."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "imperium",
+   "name": "Imperium",
+   "colour": "#d4a017",
+   "trait": {
+    "title": "Defenders of the Imperium",
+    "flavour": "Those who fight for Humanity are its shield: warriors who will not hesitate to lay down their lives in sacrifice if it means staving off Mankind's extinction for another day.",
+    "rules": [
+     "Whenever an operative is shooting an **IMPERIUM** NPO or friendly **IMPERIUM NEMESIS** operative, if that **IMPERIUM** operative is wholly within its territory, one of its defence dice can be retained as a normal success without rolling it (in addition to a cover save, if any)."
+    ]
+   },
+   "units": [
+    {
+     "id": "cadian-shock-trooper",
+     "name": "Cadian Shock Trooper",
+     "keywords": [
+      "Imperium",
+      "Cadian Shock Trooper"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "5+",
+     "wounds": 7,
+     "points": 1,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Saturate, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Grenade launcher (frag)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/4",
+       "rules": "Blast 2″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Grenade launcher (krak)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Lasgun",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Meltagun",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "6/3",
+       "rules": "Range 6″, Devastating 4, Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Plasma gun (standard)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/6",
+       "rules": "Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Plasma gun (supercharge)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "5/6",
+       "rules": "Hot, Lethal 5+, Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Bayonet",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a lasgun and bayonet. 1 in 3 can have a ranged weapon marked with an asterisk (*) instead of a lasgun. Note that if a weapon with an asterisk has multiple profiles, it's still the same ranged weapon."
+      }
+     ]
+    },
+    {
+     "id": "intercessor",
+     "name": "Intercessor",
+     "keywords": [
+      "Imperium",
+      "Intercessor"
+     ],
+     "apl": 3,
+     "move": "6″",
+     "save": "3+",
+     "wounds": 14,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Bolt rifle",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy bolt pistol",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Range 8″, Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Chainsword",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Guardian, or Battler if this NPO has a heavy bolt pistol.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has either a bolt rifle and fists or a heavy bolt pistol and chainsword."
+      },
+      {
+       "title": "Astartes",
+       "text": "This NPO can perform two Fight or two Shoot actions during each of its activations."
+      }
+     ]
+    },
+    {
+     "id": "battle-sister",
+     "name": "Battle Sister",
+     "keywords": [
+      "Imperium",
+      "Battle Sister"
+     ],
+     "apl": 2,
+     "move": "6″",
+     "save": "3+",
+     "wounds": 9,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Boltgun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Flamer",
+       "atk": 4,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Saturate, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy bolter (focused)",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Heavy (Dash only), Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy bolter (sweeping)",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/5",
+       "rules": "Heavy (Dash only), Piercing Crits 1, Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Heavy flamer",
+       "atk": 5,
+       "hit": "2+",
+       "dmg": "3/3",
+       "rules": "Range 8″, Heavy (Dash only), Saturate, Torrent 2″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Meltagun",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "6/3",
+       "rules": "Range 6″, Devastating 4, Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Multi-melta",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "6/3",
+       "rules": "Devastating 4, Heavy (Dash only), Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Storm bolter",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Ceaseless",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "3+",
+       "dmg": "2/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman. If this NPO has a weapon with the Heavy (Dash only) weapon rule, it will perform the Dash action before the Reposition action.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a boltgun and fists. 1 in 5 can have a ranged weapon marked with an asterisk (*) instead of a boltgun. Note that if a weapon with an asterisk has multiple profiles, it's still the same ranged weapon."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "votann",
+   "name": "Leagues of Votann",
+   "colour": "#6b8fb5",
+   "trait": {
+    "title": "Acquisition at All Costs",
+    "flavour": "When a valuable prize claimed by their kindred is at stake, the Kin will leverage its seizure with all the efficient – and deadly – means at their disposal.",
+    "rules": [
+     "Whenever a **LEAGUES OF VOTANN** NPO or friendly **LEAGUES OF VOTANN NEMESIS** operative is shooting against or fighting against an enemy operative that contests an objective marker, or an area of the killzone that determines victory (e.g. a flank on pg 50), that **LEAGUES OF VOTANN** operative's weapons have the Balanced weapon rule."
+    ]
+   },
+   "units": [
+    {
+     "id": "hearthkyn-warrior",
+     "name": "Hearthkyn Warrior",
+     "keywords": [
+      "Leagues of Votann",
+      "Hearthkyn Warrior"
+     ],
+     "apl": 2,
+     "move": "5″",
+     "save": "3+",
+     "wounds": 8,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Autoch-pattern bolter",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "Accurate 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "EtaCarn plasma beamer",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "HYLas auto rifle",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Ceaseless, Rending",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "HYLas rotary cannon (focused)",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Ceaseless, Heavy (Reposition only), Saturate",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "HYLas rotary cannon (sweeping)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Ceaseless, Heavy (Reposition only), Saturate, Torrent 1″",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Ion blaster",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "L7 missile launcher (blast)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/5",
+       "rules": "Blast 2″",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "L7 missile launcher (focused)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "5/6",
+       "rules": "Piercing 1",
+       "optional": true
+      },
+      {
+       "type": "ranged",
+       "name": "Magna rail rifle",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/2",
+       "rules": "Devastating 3, Heavy (Dash only), Piercing 2",
+       "optional": true
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "2/3",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman. If this NPO has a magna rail rifle, it will perform the Dash action before the Reposition action.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has fists and either an autoch-pattern bolter or an ion blaster. 1 in 5 can have a ranged weapon marked with an asterisk (*) instead of an autoch-pattern bolter or an ion blaster."
+      }
+     ]
+    },
+    {
+     "id": "br-khyr-thunderkyn",
+     "name": "Brôkhyr Thunderkyn",
+     "keywords": [
+      "Leagues of Votann",
+      "Brôkhyr Thunderkyn"
+     ],
+     "apl": 3,
+     "move": "5″",
+     "save": "3+",
+     "wounds": 12,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Bolt cannon",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Heavy (Reposition only), Piercing Crits 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Graviton blast cannon",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Blast 2″, Heavy (Reposition only), Piercing 1, Stun",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "SP conversion beamer (short range)",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "4/5",
+       "rules": "Range 8″, Heavy (Reposition only)",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "SP conversion beamer (long range)",
+       "atk": 5,
+       "hit": "4+",
+       "dmg": "5/6",
+       "rules": "Minimum Range 8″*, Heavy (Reposition only), Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Fists",
+       "atk": 3,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has fists and either a bolt cannon, a graviton blast cannon or an SP conversion beamer."
+      },
+      {
+       "title": "Brôkhyr",
+       "text": "This NPO can perform two Shoot actions during each of its activations, but 1 additional AP must be spent for the second action."
+      },
+      {
+       "title": "*Minimum Range 8″",
+       "text": "Only operatives more than 8″ from this NPO can be valid targets."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "necron",
+   "name": "Necrons",
+   "colour": "#3ddc84",
+   "trait": {
+    "title": "Living Metal",
+    "flavour": "The living metal of Necrons' bodies is capable of reknitting in a semi-sentient fashion. Wounds close and limbs reattach until the injured Necron shambles upright once more to take its revenge.",
+    "rules": [
+     "In the Ready step of each Strategy phase, each **NECRON** NPO and friendly **NECRON NEMESIS** operative regains up to D3+1 lost wounds (roll separately for each)."
+    ]
+   },
+   "units": [
+    {
+     "id": "necron-warrior",
+     "name": "Necron Warrior",
+     "keywords": [
+      "Necron",
+      "Warrior"
+     ],
+     "apl": 2,
+     "move": "5″",
+     "save": "4+",
+     "wounds": 9,
+     "points": 2,
+     "weapons": [
+      {
+       "type": "ranged",
+       "name": "Gauss flayer",
+       "atk": 4,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "ranged",
+       "name": "Gauss reaper",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "3/4",
+       "rules": "Range 8″, Piercing 1",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Combat attachment",
+       "atk": 3,
+       "hit": "4+",
+       "dmg": "3/4",
+       "rules": "",
+       "optional": false
+      }
+     ],
+     "behaviour": "Marksman.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a combat attachment and either a gauss flayer or a gauss reaper."
+      },
+      {
+       "title": "Unrelenting",
+       "text": "Whenever this NPO is shooting against the closest valid target, its weapons have the Accurate 1 weapon rule."
+      }
+     ]
+    },
+    {
+     "id": "lychguard",
+     "name": "Lychguard",
+     "keywords": [
+      "Necron",
+      "Lychguard"
+     ],
+     "apl": 3,
+     "move": "5″",
+     "save": "3+",
+     "wounds": 13,
+     "points": 3,
+     "weapons": [
+      {
+       "type": "melee",
+       "name": "Hyperphase sword & dispersion shield",
+       "atk": 4,
+       "hit": "3+",
+       "dmg": "4/6",
+       "rules": "Lethal 5+, Shield*",
+       "optional": false
+      },
+      {
+       "type": "melee",
+       "name": "Warscythe",
+       "atk": 5,
+       "hit": "3+",
+       "dmg": "5/7",
+       "rules": "Lethal 5+",
+       "optional": false
+      }
+     ],
+     "behaviour": "Brawler.",
+     "rules": [
+      {
+       "title": "Weapon Options",
+       "text": "This NPO has a hyperphase sword & dispersion shield or a warscythe."
+      },
+      {
+       "title": "Lychguard",
+       "text": "This NPO can perform two Fight actions during each of its activations."
+      },
+      {
+       "title": "*Shield",
+       "text": "Whenever this NPO is fighting or retaliating with this weapon, each of its blocks can be allocated to block two unresolved successes (instead of one). Whenever an operative is shooting this NPO, weapons that have the Piercing 1 weapon rule have the Piercing Crits 1 weapon rule instead."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
