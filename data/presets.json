@@ -54,7 +54,7 @@
         { "from": 8, "to": 9, "result": "reinforce", "points": { "if": "extractionDone", "then": 2, "else": 1 } },
         { "from": 10, "to": 13, "result": "skip", "note": "NEMESIS activation. No NEMESIS in play: skip." }
       ],
-      "flags": [ { "id": "extractionDone", "label": "COORDINATE EXTRACTION performed" } ],
+      "flags": [ { "id": "extractionDone", "label": "COORDINATE EXTRACTION performed", "default": false } ],
       "notes": [
         "COORDINATE EXTRACTION (1AP): randomly determine one non-player killzone edge as the escape edge. Once per battle, not in TP1.",
         "Battle ends when every player operative is incapacitated or escaped. 3/4 escaped: major win. 1/2: minor win. Less: major loss."

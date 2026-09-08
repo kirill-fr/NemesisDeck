@@ -155,7 +155,7 @@
           <div class="a-h pixel-text"><span>REINFORCEMENTS</span><b id="aSpawnHint">SPEND THE POOL</b></div>
           <div class="a-force" id="aSpawnList"></div>
           <div class="a-note pixel-text" id="aPlacementGame"></div>
-          <section class="controls"><button id="aBeginFirefight">BEGIN FIREFIGHT</button></section>
+          <section class="controls"><button id="aBeginFirefight">BEGIN FIREFIGHT</button><button id="aRosterBtn1" class="a-rosterbtn">ROSTER</button></section>
         </div>
 
         <div id="aFirefight" class="a-panel" hidden>
@@ -170,9 +170,10 @@
           </div>
           <div class="a-memo pixel-text" id="aMemo"></div>
           <div class="a-h pixel-text"><span>DISCARD <b id="aDiscard">—</b></span><b>DECK <span id="aDeckLeft">13</span></b></div>
-          <section class="controls"><button id="aNpoTurn">NPO TURN</button><button id="aEndTp">END TURNING POINT</button></section>
+          <section class="controls"><button id="aNpoTurn">NPO TURN</button><button id="aRosterBtn2" class="a-rosterbtn">ROSTER</button><button id="aEndTp">END TURNING POINT</button></section>
         </div>
       </div>
+
     </section>
     <section class="layout">
       <aside class="side pixel-text">
@@ -266,6 +267,18 @@
     <div id="threatIntroNumber" class="threat-intro-number">--</div>
   </div>
 </div>
+
+  <div id="aRoster" class="a-overlay pixel-text" hidden aria-label="NPO roster">
+    <div class="a-overlay-box">
+      <div class="a-h pixel-text"><span>NPO ROSTER</span><b id="aRosterCount">00</b></div>
+      <div class="a-roster" id="aRosterList"></div>
+      <section class="controls"><button id="aExpendAll">EXPEND ALL</button><button id="aRosterClose">CLOSE ROSTER</button></section>
+    </div>
+  </div>
+
+  <div id="aDatacard" class="a-overlay pixel-text" hidden aria-label="NPO datacard">
+    <div class="a-overlay-box" id="aDatacardBody"></div>
+  </div>
 
 <script type="module" src="js/main.js"></script>
 </body>

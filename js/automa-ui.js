@@ -16,6 +16,7 @@ const ACTIVATION_PRIORITY = [
 ];
 const QUESTIONS = {
   playersControlObjective: 'DO PLAYER OPERATIVES CONTROL ONE OR MORE OBJECTIVE MARKERS?',
+  extractionDone: 'HAS A PLAYER OPERATIVE PERFORMED COORDINATE EXTRACTION?',
 };
 
 export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
@@ -88,6 +89,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     $('aInit').textContent = s.initiative === 'npo' ? 'NPO' : s.initiative === 'players' ? 'PLAYERS' : s.initiative === 'tie' ? 'TIE' : '--';
     $('aPool').textContent = pts(s.pool);
     $('aOnBoard').textContent = pad(s.roster.length) + ' / ' + s.npoLimit;
+    document.querySelectorAll('.a-rosterbtn').forEach(b => { b.textContent = `ROSTER // ${pad(s.roster.filter(u => u.ready).length)} READY`; });
     frameTitle.textContent = `JOINT OPS // ${mission.name.toUpperCase()} // TP ${pad(s.tp)}`;
     $('aDiscard').textContent = s.discard.length ? s.discard.map(pad).join(' ') : '—';
     $('aDeckLeft').textContent = s.deckRemaining;
@@ -195,6 +197,7 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
       if(r.result === 'activate') $('aResult').textContent = r.activate ? 'ACTIVATE ONE NPO' : 'NO READY NPO // SKIP';
       if(r.activate){
         parts.push(`<div>READY NPO: <b>${pad(r.readyCount)}</b>. IF SEVERAL COULD ACTIVATE, PICK THE ONE THAT:</div><ol>${ACTIVATION_PRIORITY.map(x => `<li>${md(x)}</li>`).join('')}</ol>`);
+        parts.push(`<div class="a-act" id="aMemoReady"></div>`);
         parts.push(behaviourMemo());
       }else parts.push('<div>ALL NPO EXPENDED // ALTERNATE BACK TO THE PLAYERS</div>');
     }
@@ -203,7 +206,19 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     if(r.result === 'custom'){ $('aResult').textContent = 'CUSTOM'; parts.push(`<div>${esc(r.text).toUpperCase()}</div>`); }
     memo.innerHTML = parts.join('');
     const sp = $('aMemoSpawn'); if(sp) spawnRows(r.affordable || automa.affordable(), sp);
+    readyRows();
     status();
+  }
+
+  // Ready NPOs on the board with a button to mark the chosen one as activated (expended).
+  function readyRows(){
+    const el = $('aMemoReady'); if(!el) return;
+    const ready = automa.state().roster.filter(u => u.ready);
+    el.innerHTML = ready.map(u => `<div class="a-row" data-uid="${u.uid}">
+      <span class="a-name pixel-text">${esc(u.name).toUpperCase()} #${u.uid}</span>
+      <span class="a-pts pixel-text">W ${u.wounds}/${u.maxWounds} · ${u.order.toUpperCase()}</span>
+      <button data-activated="${u.uid}">DONE</button></div>`).join('');
+    el.querySelectorAll('[data-activated]').forEach(b => bindPress(b, () => { automa.setReady(Number(b.dataset.activated), false); sfx('discard'); readyRows(); status(); }));
   }
 
   function npoTurn(){
@@ -211,6 +226,52 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
     if(!r) return;
     sfx('draw'); glitch('card');
     showResult(r);
+  }
+
+  // --- roster overlay -----------------------------------------------------
+  function renderRoster(){
+    const s = automa.state();
+    $('aRosterCount').textContent = `${pad(s.roster.length)} / ${s.npoLimit} // POOL ${pts(s.pool)}`;
+    const el = $('aRosterList');
+    if(!s.roster.length){ el.innerHTML = '<div class="a-note pixel-text">NO NPO ON THE BOARD_</div>'; return; }
+    el.innerHTML = s.roster.map(u => `<div class="a-unit${u.ready ? '' : ' expended'}" data-uid="${u.uid}">
+      <button class="a-uname" data-card="${u.npoId}">${esc(u.name).toUpperCase()} #${u.uid}</button>
+      <button class="a-utog a-uorder${u.order === 'engage' ? ' engage' : ''}" data-order="${u.uid}">ORDER: ${u.order.toUpperCase()}</button>
+      <button class="a-utog a-uready${u.ready ? '' : ' expended'}" data-ready="${u.uid}">${u.ready ? 'READY' : 'EXPENDED'}</button>
+      <button class="a-step" data-wdec="${u.uid}">-</button>
+      <div class="a-w${u.wounds <= Math.ceil(u.maxWounds / 2) ? ' low' : ''}">${u.wounds}<small>/ ${u.maxWounds} W</small></div>
+      <button class="a-step" data-winc="${u.uid}" ${u.wounds >= u.maxWounds ? 'disabled' : ''}>+</button>
+    </div>`).join('');
+    const uid = b => Number(b.dataset.order || b.dataset.ready || b.dataset.wdec || b.dataset.winc);
+    el.querySelectorAll('[data-order]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setOrder(u.uid, u.order === 'engage' ? 'conceal' : 'engage'); sfx('ui'); renderRoster(); }));
+    el.querySelectorAll('[data-ready]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setReady(u.uid, !u.ready); sfx('ui'); renderRoster(); }));
+    el.querySelectorAll('[data-wdec]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setWounds(u.uid, u.wounds - 1); sfx(u.wounds - 1 <= 0 ? 'discard' : 'ui'); if(u.wounds - 1 <= 0) glitch('card'); renderRoster(); status(); }));
+    el.querySelectorAll('[data-winc]').forEach(b => bindPress(b, () => { const u = automa.state().roster.find(x => x.uid === uid(b)); automa.setWounds(u.uid, u.wounds + 1); sfx('ui'); renderRoster(); }));
+    el.querySelectorAll('[data-card]').forEach(b => bindPress(b, () => openDatacard(b.dataset.card)));
+  }
+  function openRoster(){ renderRoster(); $('aRoster').hidden = false; sfx('ui'); glitch('light'); }
+  function closeRoster(){ $('aRoster').hidden = true; sfx('ui'); readyRows(); status(); }
+
+  function openDatacard(npoId){
+    const u = faction.units.find(x => x.id === npoId); if(!u) return;
+    const arch = u.behaviour.split(/[ ,.]/)[0];
+    const b = data.npo.behaviours[arch];
+    const t = faction.trait;
+    $('aDatacardBody').innerHTML = `<div class="a-dc">
+      <div class="a-h pixel-text"><span>NPO DATACARD</span><b>${esc(faction.name).toUpperCase()}</b></div>
+      <h3>${esc(u.name).toUpperCase()}</h3>
+      <div class="a-kw">${u.keywords.map(esc).join(', ').toUpperCase()}</div>
+      <div class="a-stats"><div><small>APL</small><b>${u.apl}</b></div><div><small>MOVE</small><b>${esc(u.move)}</b></div><div><small>SAVE</small><b>${esc(u.save)}</b></div><div><small>WOUNDS</small><b>${u.wounds}</b></div><div><small>POINTS</small><b>${pts(u.points)}</b></div></div>
+      <table><tr><th>WEAPON</th><th class="n">ATK</th><th class="n">HIT</th><th class="n">DMG</th><th>WR</th></tr>
+      ${u.weapons.map(w => `<tr><td>${w.type === 'ranged' ? '▸' : '✕'} ${esc(w.name)}${w.optional ? '*' : ''}</td><td class="n">${w.atk}</td><td class="n">${esc(w.hit)}</td><td class="n">${esc(w.dmg)}</td><td>${esc(w.rules) || '—'}</td></tr>`).join('')}</table>
+      <div class="a-rule"><b>BEHAVIOUR:</b> ${md(u.behaviour)}</div>
+      ${u.rules.map(r => `<div class="a-rule"><b>${esc(r.title).toUpperCase()}:</b> ${md(r.text)}</div>`).join('')}
+      <div class="a-rule"><b>${arch.toUpperCase()}:</b> ${md(b.desc)}<ol>${b.steps.map(st => `<li>${md(st)}</li>`).join('')}</ol></div>
+      <div class="a-trait"><b>ALLEGIANCE TRAIT // ${esc(t.title).toUpperCase()}</b><br>${t.rules.map(md).join('<br>')}</div>
+      <section class="controls"><button id="aDatacardClose">CLOSE DATACARD</button></section>
+    </div>`;
+    bindPress($('aDatacardClose'), () => { $('aDatacard').hidden = true; sfx('ui'); });
+    $('aDatacard').hidden = false; sfx('ui'); glitch('light');
   }
 
   function endTurningPoint(){
@@ -239,6 +300,10 @@ export function createAutomaUi({ bindPress, sfx, glitch, frameTitle }){
   bindPress($('aBeginFirefight'), beginFirefight);
   bindPress($('aNpoTurn'), npoTurn);
   bindPress($('aEndTp'), endTurningPoint);
+  bindPress($('aRosterBtn1'), openRoster);
+  bindPress($('aRosterBtn2'), openRoster);
+  bindPress($('aRosterClose'), closeRoster);
+  bindPress($('aExpendAll'), () => { automa.expendAll(); sfx('discard'); renderRoster(); });
   document.querySelectorAll('#aTie [data-init]').forEach(b => bindPress(b, () => decideTie(b.dataset.init)));
   return { start, load, get automa(){ return automa; } };
 }

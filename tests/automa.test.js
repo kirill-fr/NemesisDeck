@@ -159,6 +159,16 @@ test('conditional points ask the UI unless a flag already answers', () => {
   assert.equal(s.points, 2);
 });
 
+test('mission flags start from their preset default, so no query is needed', () => {
+  const b = make(mission('ambush'), 4);
+  b.addNpo('boy');
+  assert.deepEqual(b.state().flags, { extractionDone: false });
+  b.startTurningPoint(); b.startFirefight();
+  let s; do { s = b.npoTurn(); } while(s.result !== 'reinforce');
+  assert.equal(s.pending, undefined);
+  assert.equal(s.points, 1);
+});
+
 test('roster edits: wounds, orders, ready; zero wounds removes the NPO', () => {
   const a = make(mission('erosion-of-power'));
   const { unit } = a.addNpo('boy');

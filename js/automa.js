@@ -61,6 +61,7 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
   let nextUid = 1;
   let pending = null;                // { card, row, needs } awaiting resolvePending()
   const flags = {};                  // mission flags set by the players (e.g. extractionDone)
+  for(const f of cfg.flags || []) flags[f.id] = !!f.default;
   const log = [];
 
   const note = (type, data = {}) => { log.push({ tp, type, ...data }); };
