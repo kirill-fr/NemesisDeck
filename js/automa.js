@@ -12,11 +12,13 @@
 //   table: [ { from, to, result, points?, then?, condition? } ],  // activation card table
 //   npoLimit: 10,
 //   deckSize: 13,
+//   orders: <data/orders.json> | null    // custom scenario: routine + tactical order decks
 // }
 // table results: 'activate' | 'reinforce' | 'skip' | 'event' | 'custom'
 // points may be a number or { if: '<contextKey>', then: n, else: m } (asks the UI).
 
 import { shuffle } from './deck.js';
+import { createOrders, archetypeOf } from './orders.js';
 
 export const RESULTS = ['activate', 'reinforce', 'skip', 'event', 'custom'];
 
@@ -49,6 +51,7 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
   };
   validateTable(cfg.table, cfg.deckSize);
   const catalog = new Map(npoCatalog.map(n => [n.id, n]));
+  const orders = cfg.orders ? createOrders({ orders: cfg.orders, rng }) : null;
 
   let tp = 0;
   let phase = 'setup';               // setup | strategy | firefight | end
@@ -184,7 +187,12 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
       out.readyCount = readyCount();
     }
     if(row.result === 'custom') out.text = row.text || '';
-    note('card', { card, result: row.result, points: out.points });
+    if(row.result === 'event' && orders){
+      const ready = new Set(roster.filter(u => u.ready).map(u => archetypeOf(catalog.get(u.npoId).behaviour)).filter(Boolean));
+      out.order = orders.drawTactical(ready);
+      if(!out.order){ out.activate = readyCount() > 0; out.readyCount = readyCount(); }
+    }
+    note('card', { card, result: row.result, points: out.points, order: out.order ? out.order.id : undefined });
     return out;
   }
 
@@ -205,6 +213,17 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
     if(!res.pending) pending = null;
     return res;
   }
+
+  // Custom scenario: draw a routine order for the NPO the players chose to activate.
+  function drawRoutine(uid){
+    if(!orders) return null;
+    const u = roster.find(x => x.uid === uid); if(!u) return null;
+    const arch = archetypeOf(catalog.get(u.npoId).behaviour); if(!arch) return null;
+    const r = orders.drawRoutine(arch);
+    note('routine', { uid, order: r.label });
+    return { uid, name: u.name, ...r };
+  }
+  function archetypeOfUnit(uid){ const u = roster.find(x => x.uid === uid); return u ? archetypeOf(catalog.get(u.npoId).behaviour) : null; }
 
   function setFlag(name, value = true){ flags[name] = !!value; note('flag', { name, value: !!value }); return { ...flags }; }
 
@@ -227,11 +246,13 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
       roster: roster.map(u => ({ ...u })),
       pending: pending ? { card: pending.card, needs: pending.needs } : null,
       flags: { ...flags },
+      orders: orders ? orders.state() : null,
       log: log.slice(-50),
     };
   }
   function serialize(){
-    return JSON.stringify({ v: 1, cfg, tp, phase, initiative, deck, discard, pool, setupSpent, roster, nextUid, pending, flags, log });
+    const { orders: _o, ...cfgNoOrders } = cfg;
+    return JSON.stringify({ v: 1, cfg: cfgNoOrders, tp, phase, initiative, deck, discard, pool, setupSpent, roster, nextUid, pending, flags, log, orders: orders ? orders.serialize() : null });
   }
   function restore(json){
     const s = JSON.parse(json);
@@ -239,6 +260,7 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
     ({ tp, phase, initiative, deck, discard, pool, setupSpent, roster, nextUid, pending } = s);
     for(const k of Object.keys(flags)) delete flags[k];
     Object.assign(flags, s.flags || {});
+    if(orders && s.orders) orders.restore(s.orders);
     log.length = 0; log.push(...s.log);
     return state();
   }
@@ -247,6 +269,7 @@ export function createAutoma({ config, npoCatalog, rng = Math.random }){
     config: cfg,
     addNpo, removeNpo, setWounds, setOrder, setReady, expendAll, affordable,
     finishSetup, startTurningPoint, setInitiative, startFirefight, npoTurn, resolvePending, endTurningPoint, setFlag,
+    drawRoutine, archetypeOfUnit, orders,
     state, serialize, restore,
   };
 }

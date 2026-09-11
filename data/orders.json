@@ -1,0 +1,161 @@
+{
+  "$schema": "orders.v1",
+  "source": "Custom scenario: NPO orders prototype. Behaviour archetypes stay as printed; orders replace the threat principle for movement.",
+
+  "resolver": {
+    "title": "MOVEMENT RESOLVER",
+    "intro": "Every order is a short list of operators. Resolve them in the order written. Movement always uses the shortest legal route and stops as soon as the stated condition is first true. The player never chooses a position for an NPO; they only measure.",
+    "operators": [
+      { "id": "APPROACH", "text": "APPROACH X: move along the shortest legal route to X, as far as the action allows." },
+      { "id": "RETREAT", "text": "RETREAT FROM X: move to increase the distance from X as much as the action allows." },
+      { "id": "SEEK COVER", "text": "SEEK COVER FROM X: continue the current task and stop at the first legal position in cover from X. If no such position is reachable, finish the move as written." },
+      { "id": "ACQUIRE", "text": "ACQUIRE X: move along the shortest legal route and stop at the first position from which X is a valid target." },
+      { "id": "REACH", "text": "REACH X: move along the shortest legal route until X is within this NPO's control range." }
+    ],
+    "rules": [
+      "TIES: when two routes or two positions are equally short, use the arrow on the order: ↶ go left of Focus, ↷ go right of Focus, as seen from the NPO looking at its Focus.",
+      "FOCUS is picked once per activation by the archetype's focus list. On a tie keep last activation's Focus, then the lowest player operative number.",
+      "An NPO never ends a move within control range of an enemy unless the operator is CHARGE.",
+      "If an order cannot be started at all, resolve its FALLBACK line instead. If that is impossible too, the NPO is expended.",
+      "ORDER: the NPO has an Engage order if it will Shoot, Fight or Charge this activation, otherwise Conceal."
+    ]
+  },
+
+  "activationPriority": {
+    "title": "WHICH NPO ACTIVATES",
+    "steps": [
+      "Within control range of a player operative",
+      "Has a valid target right now",
+      "Contesting an objective marker",
+      "Closest to a player operative (by movement distance)",
+      "Lowest NPO number"
+    ]
+  },
+
+  "archetypes": {
+    "Marksman": {
+      "focus": [ "Valid target right now", "Controls or carries an objective", "Wounded", "Closest" ],
+      "routines": {
+        "HUNT": {
+          "steps": [ "ACQUIRE Focus", "SHOOT Focus" ],
+          "fallback": "If Focus cannot be acquired this activation: move the full distance along the route, then SEEK COVER from Focus."
+        },
+        "TAKE POSITION": {
+          "steps": [ "If Focus is a valid target: SHOOT Focus, then SEEK COVER from Focus", "Otherwise: SEEK COVER from Focus, then SHOOT if any target is valid" ],
+          "fallback": "No valid target and already in cover: stay put, Conceal."
+        },
+        "DISENGAGE": {
+          "steps": [ "If a player operative is within 6\": RETREAT from it until the first position in cover from Focus (FALL BACK if within control range)", "SHOOT Focus if valid" ],
+          "fallback": "No player operative within 6\": resolve TAKE POSITION."
+        }
+      },
+      "deck": [ "HUNT ↶", "HUNT ↷", "HUNT ↷", "TAKE POSITION ↶", "TAKE POSITION ↷", "DISENGAGE ↶" ]
+    },
+    "Brawler": {
+      "focus": [ "Closest by movement distance", "Wounded", "Last activation's Focus" ],
+      "routines": {
+        "RUSH": {
+          "steps": [ "CHARGE Focus if possible, then FIGHT", "Otherwise REPOSITION and DASH along the shortest route to Focus, ignoring cover" ],
+          "fallback": "Cannot move at all: FIGHT anything in control range, else expended."
+        },
+        "STALK": {
+          "steps": [ "CHARGE Focus if possible, then FIGHT", "Otherwise APPROACH Focus; if a position in cover from Focus is reachable without lengthening the remaining route by more than 2\", stop there" ],
+          "fallback": "Cannot move at all: FIGHT anything in control range, else expended."
+        },
+        "FINISH THEM": {
+          "steps": [ "Focus = a wounded player operative it can CHARGE this activation; if none, use the normal focus list", "CHARGE Focus, then FIGHT. If this NPO may perform two FIGHT actions, do so" ],
+          "fallback": "No CHARGE possible: resolve RUSH."
+        }
+      },
+      "deck": [ "RUSH ↶", "RUSH ↷", "RUSH ↷", "STALK ↶", "STALK ↷", "FINISH THEM ↶" ]
+    },
+    "Battler": {
+      "focus": [ "Valid target right now", "Controls or carries an objective", "Wounded", "Closest" ],
+      "routines": {
+        "ADVANCE": {
+          "steps": [ "SHOOT Focus if valid", "APPROACH the nearest objective marker not controlled by NPOs (Focus if there is none), and SEEK COVER from Focus on the way" ],
+          "fallback": "Nothing to shoot and nowhere to go: SEEK COVER from the closest player operative."
+        },
+        "ASSAULT": {
+          "steps": [ "CHARGE Focus if possible, then FIGHT", "Otherwise SHOOT Focus if valid, then APPROACH Focus" ],
+          "fallback": "Nothing valid: APPROACH Focus and SEEK COVER from it."
+        },
+        "CLEAR": {
+          "steps": [ "Focus = the closest player operative contesting an objective marker; if none, use the normal focus list", "Resolve ASSAULT against that Focus" ],
+          "fallback": "As ASSAULT."
+        }
+      },
+      "deck": [ "ADVANCE ↶", "ADVANCE ↷", "ASSAULT ↶", "ASSAULT ↷", "ASSAULT ↷", "CLEAR ↶" ]
+    },
+    "Guardian": {
+      "anchor": "ANCHOR: the objective marker or mission point nearest to this NPO when it is set up. If there is none, the position it was set up in.",
+      "focus": [ "Closest to Anchor", "Valid target right now", "Wounded", "Closest" ],
+      "routines": {
+        "HOLD": {
+          "steps": [ "Do not leave the control range of Anchor if possible", "SHOOT Focus if valid, then SEEK COVER from Focus without leaving Anchor" ],
+          "fallback": "Not within control range of Anchor: REACH Anchor, then SHOOT if valid."
+        },
+        "INTERCEPT": {
+          "steps": [ "If Focus is within 4\" of Anchor and CHARGE is possible: CHARGE, then FIGHT", "Otherwise SHOOT Focus if valid, then REACH Anchor" ],
+          "fallback": "Nothing valid: REACH Anchor and SEEK COVER from the closest player operative."
+        },
+        "RECLAIM": {
+          "steps": [ "If NPOs do not control Anchor: REACH Anchor and SEEK COVER from Focus on arrival, then SHOOT if any target is valid", "Otherwise resolve HOLD" ],
+          "fallback": "As HOLD."
+        }
+      },
+      "deck": [ "HOLD ↶", "HOLD ↷", "HOLD ↷", "INTERCEPT ↶", "INTERCEPT ↷", "RECLAIM ↶" ]
+    }
+  },
+
+  "tactical": {
+    "intro": "Drawn instead of a routine when the activation deck shows the TACTICAL slot. Each card names who executes it. If no such NPO is ready, draw the next tactical card; if the tactical deck cannot produce an executor, treat the slot as ACTIVATE ONE NPO.",
+    "effects": {
+      "SMOKE": "Place a smoke marker (2\" radius) centred on the target. Operatives are obscured when the line between them crosses it. Lasts until the end of the turning point.",
+      "SUPPRESSED": "Until the end of its next activation the operative subtracts 1\" from its Move stat and cannot DASH.",
+      "STUNNED": "Until the end of its next activation the operative subtracts 1 from its APL stat. No damage."
+    },
+    "cards": [
+      {
+        "id": "PIN THEM DOWN", "who": "Marksman", "squad": false,
+        "steps": [ "SHOOT Focus", "If any damage was inflicted, Focus is SUPPRESSED", "SEEK COVER from Focus" ],
+        "fallback": "No valid target: resolve HUNT."
+      },
+      {
+        "id": "AIM", "who": "Marksman", "squad": false,
+        "steps": [ "Do not move", "SHOOT Focus: this NPO's ranged weapons have Balanced and Lethal 5+ for this activation", "Remaining AP: SHOOT again if it may, else nothing" ],
+        "fallback": "No valid target: resolve TAKE POSITION."
+      },
+      {
+        "id": "FRENZY", "who": "Brawler", "squad": false,
+        "steps": [ "CHARGE Focus, then FIGHT", "FIGHT again for free" ],
+        "fallback": "No CHARGE possible: resolve RUSH."
+      },
+      {
+        "id": "FLASH AND CLEAR", "who": "Battler", "squad": false,
+        "steps": [ "If two or more player operatives are within 3\" of each other and one of them is within 6\" of this NPO: throw a stun grenade at the closest of them (1 AP). Every player operative within 1\" of it is STUNNED", "APPROACH the stunned operative and SEEK COVER from it" ],
+        "fallback": "Condition not met: resolve ASSAULT."
+      },
+      {
+        "id": "FORTIFY", "who": "Guardian", "squad": false,
+        "steps": [ "Do not move", "SHOOT Focus if valid", "Until this NPO's next activation, player operatives shooting it worsen the Hit stat of their weapons by 1" ],
+        "fallback": "Always possible."
+      },
+      {
+        "id": "COVER THE ADVANCE", "who": "Guardian or Battler", "squad": true,
+        "steps": [ "Pick the ready Brawler closest to a player operative", "The ready Guardian or Battler closest to that Brawler throws SMOKE centred on it (1 AP), then SHOOTS if it can", "That Brawler activates next, before the players, with RUSH ↷" ],
+        "fallback": "No ready Brawler, or no ready Guardian/Battler: draw the next tactical card."
+      },
+      {
+        "id": "KILL ZONE", "who": "Marksman and Guardian", "squad": true,
+        "steps": [ "Pick the objective marker closest to a player operative", "The ready Marksman closest to it resolves AIM", "Then the ready Guardian closest to it activates with HOLD, before the players" ],
+        "fallback": "No ready Marksman or no ready Guardian: draw the next tactical card."
+      },
+      {
+        "id": "FLUSH THEM OUT", "who": "Battler and Marksman", "squad": true,
+        "steps": [ "Focus = the player operative in cover closest to a ready Battler", "That Battler throws a stun grenade at it if within 6\" (STUNNED, 1 AP), then APPROACHES it", "Then the ready Marksman closest to Focus activates with HUNT ↶ against that Focus, before the players" ],
+        "fallback": "No ready Battler or no ready Marksman: draw the next tactical card."
+      }
+    ]
+  }
+}
