@@ -142,7 +142,7 @@
         "fallback": "Always possible."
       },
       {
-        "id": "COVER THE ADVANCE", "who": "Guardian or Battler", "squad": true,
+        "id": "COVER THE ADVANCE", "who": "Brawler and Guardian or Battler", "squad": true,
         "steps": [ "Pick the ready Brawler closest to a player operative", "The ready Guardian or Battler closest to that Brawler throws SMOKE centred on it (1 AP), then SHOOTS if it can", "That Brawler activates next, before the players, with RUSH ↷" ],
         "fallback": "No ready Brawler, or no ready Guardian/Battler: draw the next tactical card."
       },

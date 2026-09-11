@@ -28,8 +28,7 @@ test('orders.json: every archetype has focus, routines and a 6-card deck naming 
 
 test('orders.json: tactical cards name executors from the four archetypes', () => {
   for(const c of orders.tactical.cards){
-    const w = parseWho(c.who); const names = w.all || w.any;
-    for(const n of names) assert.ok(ARCHETYPES.includes(n), `${c.id}: ${n}`);
+    for(const n of parseWho(c.who).flat()) assert.ok(ARCHETYPES.includes(n), `${c.id}: ${n}`);
     assert.ok(c.steps.length >= 1 && c.fallback, c.id);
     assert.equal(typeof c.squad, 'boolean', c.id);
   }
@@ -37,12 +36,15 @@ test('orders.json: tactical cards name executors from the four archetypes', () =
   assert.equal(new Set(ids).size, ids.length);
 });
 
-test('parseWho / canExecute handle and/or', () => {
-  assert.deepEqual(parseWho('Guardian or Battler'), { any: ['Guardian', 'Battler'] });
-  assert.deepEqual(parseWho('Marksman and Guardian'), { all: ['Marksman', 'Guardian'] });
+test('parseWho / canExecute handle and/or groups', () => {
+  assert.deepEqual(parseWho('Guardian or Battler'), [['Guardian', 'Battler']]);
+  assert.deepEqual(parseWho('Marksman and Guardian'), [['Marksman'], ['Guardian']]);
+  assert.deepEqual(parseWho('Brawler and Guardian or Battler'), [['Brawler'], ['Guardian', 'Battler']]);
   assert.equal(canExecute('Guardian or Battler', new Set(['Battler'])), true);
   assert.equal(canExecute('Marksman and Guardian', new Set(['Marksman'])), false);
   assert.equal(canExecute('Brawler', new Set(['Marksman'])), false);
+  assert.equal(canExecute('Brawler and Guardian or Battler', new Set(['Guardian', 'Marksman'])), false, 'no Brawler to cover');
+  assert.equal(canExecute('Brawler and Guardian or Battler', new Set(['Brawler', 'Battler'])), true);
 });
 
 test('archetypeOf reads the first word of a behaviour line', () => {
@@ -67,7 +69,7 @@ test('tactical draw skips cards nobody can execute and returns null when nobody 
   const o = createOrders({ orders, rng: seeded(9) });
   const r = o.drawTactical(new Set(['Marksman']));
   assert.ok(r);
-  assert.ok(canExecute(r.who, new Set(['Marksman'])), r.id);
+  assert.ok(['PIN THEM DOWN', 'AIM'].includes(r.id), r.id);
   for(const id of r.skipped) assert.ok(!canExecute(orders.tactical.cards.find(c => c.id === id).who, new Set(['Marksman'])));
   const none = o.drawTactical(new Set());
   assert.equal(none, null);

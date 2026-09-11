@@ -9,16 +9,13 @@ export function archetypeOf(behaviourText){
   return ARCHETYPES.includes(first) ? first : null;
 }
 
-// "Guardian or Battler" -> any of; "Marksman and Guardian" -> all of; "Marksman" -> that one.
+// "Guardian or Battler" -> any of; "Marksman and Guardian" -> all of;
+// "Brawler and Guardian or Battler" -> a Brawler AND (a Guardian or a Battler). Returns groups: every group needs one of its options.
 export function parseWho(who){
-  if(/ and /.test(who)) return { all: who.split(/ and /).map(s => s.trim()) };
-  if(/ or /.test(who)) return { any: who.split(/ or /).map(s => s.trim()) };
-  return { any: [who.trim()] };
+  return who.split(/ and /).map(g => g.split(/ or /).map(s => s.trim()));
 }
 export function canExecute(who, readyArchetypes){
-  const w = parseWho(who);
-  const has = a => readyArchetypes.has(a);
-  return w.all ? w.all.every(has) : w.any.some(has);
+  return parseWho(who).every(group => group.some(a => readyArchetypes.has(a)));
 }
 
 export function createOrders({ orders, rng = Math.random }){
